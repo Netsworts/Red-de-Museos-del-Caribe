@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+import random
 
 
 class Museo:
@@ -31,6 +32,10 @@ class Museo:
         if dias < 1:
             raise ValueError("Se debe simular al menos un día.")
         return dias
+     
+    def simular_dias(self, dias, minimo, maximo):
+        for d in range(dias):
+            self.registrar_dia(random.randint(minimo, maximo))
 
  
 
