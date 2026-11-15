@@ -22,6 +22,15 @@ class Museo:
         if visitantes < 0 or visitantes > self.aforo_diario:
             raise ValueError(f"Los visitantes van de 0 a {self.aforo_diario}.")
         return visitantes
+    
+    def validar_num_dias(self, texto):
+        try:
+            dias = int(texto)
+        except ValueError:
+            raise ValueError("El número de días debe ser un número entero.")
+        if dias < 1:
+            raise ValueError("Se debe simular al menos un día.")
+        return dias
 
  
 
