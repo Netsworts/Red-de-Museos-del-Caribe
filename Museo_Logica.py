@@ -13,6 +13,19 @@ class Museo:
 
     def fecha_siguiente(self):
         return self.fecha_inicio + timedelta(days=len(self.visitantes))
+   
+    def validar_visitantes(self, texto):
+        try:
+            visitantes = int(texto)
+        except ValueError:
+            raise ValueError("Los visitantes deben ser un número entero.")
+        if visitantes < 0 or visitantes > self.aforo_diario:
+            raise ValueError(f"Los visitantes van de 0 a {self.aforo_diario}.")
+        return visitantes
+
+ 
+
+
          
 
  
