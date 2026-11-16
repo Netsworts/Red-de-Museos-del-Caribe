@@ -94,6 +94,14 @@ def validar_fecha(año, mes, dia):
         return date(int(año), int(mes), int(dia))
     except ValueError:
         raise ValueError("La fecha no es válida.")
+        
+
+def crear_museo_validado(nombre, aforo_diario, año, mes,
+                         dia, nombres_existentes):
+    nombre = validar_nombre(nombre, nombres_existentes)
+    aforo = validar_aforo(aforo_diario)
+    fecha = validar_fecha(año, mes, dia)
+    return Museo(nombre, aforo, fecha)
     
 
 
