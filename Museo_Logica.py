@@ -36,6 +36,34 @@ class Museo:
     def simular_dias(self, dias, minimo, maximo):
         for d in range(dias):
             self.registrar_dia(random.randint(minimo, maximo))
+    
+    def generar_informe(self):
+        if len(self.visitantes) == 0:
+            return f"El museo {self.nombre} no tiene días registrados."
+
+        dias_registrados = len(self.visitantes)
+        total = sum(self.visitantes)
+        promedio = total / dias_registrados
+        porcentaje = promedio / self.aforo_diario * 100
+
+        suma_cuadrados = 0
+        for visitantes in self.visitantes:
+            suma_cuadrados += (visitantes - promedio) ** 2
+        desviacion_estandar = (suma_cuadrados / dias_registrados) ** 0.5
+
+        return (
+            f"Museo: {self.nombre}\n"
+            f"Aforo diario: {self.aforo_diario}\n"
+            f"Días registrados: {dias_registrados}\n"
+            f"Visitantes totales: {total}\n"
+            f"Promedio de visitantes por día: {round(promedio, 2)}\n"
+            f"Porcentaje de ocupación: {round(porcentaje, 2)}%\n"
+            f"Desviación estándar: {round(desviacion_estandar, 2)}"
+        )
+
+
+
+
 
  
 
