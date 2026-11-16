@@ -61,12 +61,39 @@ class Museo:
             f"Desviación estándar: {round(desviacion_estandar, 2)}"
         )
 
+
 def buscar_museo(nombre, museos):
     nombre = nombre.strip()
     for museo in museos:
         if museo.nombre == nombre:
             return museo
     raise ValueError("No hay un museo con ese nombre.")
+
+
+def validar_nombre(nombre, nombres_existentes):
+    nombre = nombre.strip()
+    if nombre == "":
+        raise ValueError("El nombre no puede estar vacío.")
+    if nombre in nombres_existentes:
+        raise ValueError("Ya existe un museo con ese nombre.")
+    return nombre
+
+
+def validar_aforo(aforo_diario):
+    try:
+        aforo = int(aforo_diario)
+    except ValueError:
+        raise ValueError("El aforo diario debe ser un número entero.")
+    if aforo < 1:
+        raise ValueError("El aforo diario debe ser de al menos un visitante.")
+    return aforo
+
+
+def validar_fecha(año, mes, dia):
+    try:
+        return date(int(año), int(mes), int(dia))
+    except ValueError:
+        raise ValueError("La fecha no es válida.")
     
 
 
