@@ -61,7 +61,17 @@ class Museo:
             f"Desviación estándar: {round(desviacion_estandar, 2)}"
         )
 
+def buscar_museo(nombre, museos):
+    nombre = nombre.strip()
+    for museo in museos:
+        if museo.nombre == nombre:
+            return museo
+    raise ValueError("No hay un museo con ese nombre.")
+    
 
+
+
+      
 
 
 
