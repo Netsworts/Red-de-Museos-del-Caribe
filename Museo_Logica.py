@@ -32,6 +32,10 @@ class Museo:
         if dias < 1:
             raise ValueError("Se debe simular al menos un día.")
         return dias
+    
+    def validar_rango(self, minimo, maximo):
+        if minimo > maximo:
+            raise ValueError("El mínimo no puede ser mayor que el máximo.")
      
     def simular_dias(self, dias, minimo, maximo):
         for d in range(dias):
