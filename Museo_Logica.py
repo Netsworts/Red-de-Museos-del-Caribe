@@ -54,6 +54,17 @@ class Museo:
         fecha_max = self.fecha_inicio + timedelta(days=indice_max)
         fecha_min = self.fecha_inicio + timedelta(days=indice_min)
         return fecha_max, fecha_min
+
+    def clasificar_asistencia(self, visitantes_dia):
+        porcentaje_dia = visitantes_dia / self.aforo_diario * 100
+        if porcentaje_dia < 30:
+            return "Baja"
+        elif porcentaje_dia < 60:
+            return "Media"
+        elif porcentaje_dia < 85:
+            return "Alta"
+        else:
+            return "Plena"
     
     def generar_informe(self):
         if len(self.visitantes) == 0:
