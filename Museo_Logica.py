@@ -97,6 +97,20 @@ class Museo:
                 inicio_actual = None
 
         return max_racha, inicio_max
+
+    def calcular_dias_sin_registrar(self, fecha_actual=None):
+        if fecha_actual is None:
+            fecha_actual = date.today()
+
+        ultimo_dia = self.fecha_inicio + timedelta(days=len(self.visitantes) - 1)
+        ayer = fecha_actual - timedelta(days=1)
+
+        if ultimo_dia >= ayer:
+            return ultimo_dia, True, 0, None, None
+
+        dias_faltantes = (ayer - ultimo_dia).days
+        desde = ultimo_dia + timedelta(days=1)
+        return ultimo_dia, False, dias_faltantes, desde, ayer
     
     def generar_informe(self):
         if len(self.visitantes) == 0:
