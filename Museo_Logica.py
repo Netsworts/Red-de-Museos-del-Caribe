@@ -65,6 +65,18 @@ class Museo:
             return "Alta"
         else:
             return "Plena"
+
+    def contar_dias_por_nivel(self):
+        niveles = {
+            "Baja": 0,
+            "Media": 0,
+            "Alta": 0,
+            "Plena": 0,
+        }
+        for visitantes in self.visitantes:
+            nivel = self.clasificar_asistencia(visitantes)
+            niveles[nivel] += 1
+        return niveles
     
     def generar_informe(self):
         if len(self.visitantes) == 0:
