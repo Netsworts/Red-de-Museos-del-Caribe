@@ -72,6 +72,15 @@ def menu_simular(museos):
     print(f"Se simularon {dias} días para {museo.nombre}.")
 
 
+def menu_informe(museos):
+    print("\n--- Informe de museo ---")
+    museo = pedir_museo(museos)
+    if museo is None:
+        return
+
+    print(museo.generar_informe())
+
+
 def main():
     museos = []
 
@@ -82,6 +91,9 @@ def main():
         print("1. Crear museo")
         print("2. Registrar visitantes del día siguiente")
         print("3. Simular días")
+        print("4. Informe de museo")
+        print("5. Museo con mayor y menor porcentaje de asistencia")
+        print("6. Cargar museos y visitantes desde archivos")
         print("7. Salir")
         opcion = input("Elige una opción: ").strip()
 
@@ -90,7 +102,11 @@ def main():
         elif opcion == "2":
             menu_registrar(museos)        
         elif opcion == "3":
-            menu_simular(museos)             
+            menu_simular(museos)
+        elif opcion == "4":
+            menu_informe(museos)
+        elif opcion in ("5", "6"):
+            print("Esta opción aún no está disponible.")
         elif opcion == "7":
             print("Hasta luego.")
             break
