@@ -126,6 +126,24 @@ class Museo:
             suma_cuadrados += (visitantes - promedio) ** 2
         desviacion_estandar = (suma_cuadrados / dias_registrados) ** 0.5
 
+        fecha_max, fecha_min = self.obtener_dias_extremos()
+
+        niveles = self.contar_dias_por_nivel()
+
+        max_racha, inicio_max = self.obtener_racha_baja()
+        if max_racha == 0:
+            texto_racha = "El museo no tuvo ningún día en asistencia baja."
+        else:
+            etiqueta_racha = "día" if max_racha == 1 else "días"
+            texto_racha = f"{max_racha} {etiqueta_racha} (empezó el {inicio_max})"
+
+        ultimo_dia, al_dia, dias_faltantes, desde, hasta = self.calcular_dias_sin_registrar()
+        if al_dia:
+            texto_sin_registrar = "El registro está al día."
+        else:
+            etiqueta_faltantes = "día" if dias_faltantes == 1 else "días"
+            texto_sin_registrar = f"Faltan {dias_faltantes} {etiqueta_faltantes} (del {desde} al {hasta})."
+
         return (
             f"Museo: {self.nombre}\n"
             f"Aforo diario: {self.aforo_diario}\n"
@@ -134,6 +152,15 @@ class Museo:
             f"Promedio de visitantes por día: {round(promedio, 2)}\n"
             f"Porcentaje de ocupación: {round(porcentaje, 2)}%\n"
             f"Desviación estándar: {round(desviacion_estandar, 2)}"
+            f"Día de más visitantes: {fecha_max}\n"
+            f"Día de menos visitantes: {fecha_min}\n"
+            f"Días en asistencia baja: {niveles['Baja']}\n"
+            f"Días en asistencia media: {niveles['Media']}\n"
+            f"Días en asistencia alta: {niveles['Alta']}\n"
+            f"Días en asistencia plena: {niveles['Plena']}\n"
+            f"Racha más larga en asistencia baja: {texto_racha}\n"
+            f"Último día registrado: {ultimo_dia}\n"
+            f"Días sin registrar: {texto_sin_registrar}"
         )
 
 
