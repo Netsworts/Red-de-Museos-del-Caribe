@@ -40,6 +40,20 @@ class Museo:
     def simular_dias(self, dias, minimo, maximo):
         for d in range(dias):
             self.registrar_dia(random.randint(minimo, maximo))
+
+    def obtener_dias_extremos(self):
+        indice_max = 0
+        indice_min = 0
+
+        for i in range(1, len(self.visitantes)):
+            if self.visitantes[i] > self.visitantes[indice_max]:
+                indice_max = i
+            if self.visitantes[i] < self.visitantes[indice_min]:
+                indice_min = i
+
+        fecha_max = self.fecha_inicio + timedelta(days=indice_max)
+        fecha_min = self.fecha_inicio + timedelta(days=indice_min)
+        return fecha_max, fecha_min
     
     def generar_informe(self):
         if len(self.visitantes) == 0:
