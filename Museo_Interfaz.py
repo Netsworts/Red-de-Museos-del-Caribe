@@ -53,6 +53,25 @@ def menu_registrar(museos):
     print("Día registrado.")
 
 
+def menu_simular(museos):
+    print("\n--- Simular días ---")
+    museo = pedir_museo(museos)
+    if museo is None:
+        return
+
+    try:
+        dias = museo.validar_num_dias(input("¿Cuántos días quieres simular? "))
+        minimo = museo.validar_visitantes(input("Visitantes mínimos: "))
+        maximo = museo.validar_visitantes(input("Visitantes máximos: "))
+        museo.validar_rango(minimo, maximo)
+    except ValueError as error:
+        print(error)
+        return
+
+    museo.simular_dias(dias, minimo, maximo)
+    print(f"Se simularon {dias} días para {museo.nombre}.")
+
+
 def main():
     museos = []
 
@@ -62,13 +81,16 @@ def main():
         print("=====================================")
         print("1. Crear museo")
         print("2. Registrar visitantes del día siguiente")
+        print("3. Simular días")
         print("7. Salir")
         opcion = input("Elige una opción: ").strip()
 
         if opcion == "1":
             menu_crear(museos)
         elif opcion == "2":
-            menu_registrar(museos)
+            menu_registrar(museos)        
+        elif opcion == "3":
+            menu_simular(museos)             
         elif opcion == "7":
             print("Hasta luego.")
             break
