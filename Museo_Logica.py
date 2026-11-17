@@ -77,6 +77,26 @@ class Museo:
             nivel = self.clasificar_asistencia(visitantes)
             niveles[nivel] += 1
         return niveles
+
+    def obtener_racha_baja(self):
+        racha_actual = 0
+        inicio_actual = None
+        max_racha = 0
+        inicio_max = None
+
+        for i in range(len(self.visitantes)):
+            if self.clasificar_asistencia(self.visitantes[i]) == "Baja":
+                if racha_actual == 0:
+                    inicio_actual = self.fecha_inicio + timedelta(days=i)
+                racha_actual += 1
+                if racha_actual > max_racha:
+                    max_racha = racha_actual
+                    inicio_max = inicio_actual
+            else:
+                racha_actual = 0
+                inicio_actual = None
+
+        return max_racha, inicio_max
     
     def generar_informe(self):
         if len(self.visitantes) == 0:
