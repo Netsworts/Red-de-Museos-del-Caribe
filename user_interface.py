@@ -1,4 +1,4 @@
-from Museo_Logica import (
+from business_logic import (
     buscar_museo,
     crear_museo_validado,
     )
