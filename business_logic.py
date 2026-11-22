@@ -1,21 +1,25 @@
 from datetime import date, timedelta
-import random
+from random import randint
 
-
+# Un museo: sus datos y la lista de visitantes por día.
 class Museo:
+    # Guarda nombre, aforo, fecha de inicio y una lista vacía de visitantes.
     def __init__(self, nombre, aforo_diario, fecha_inicio):
         self.nombre = nombre
         self.aforo_diario = aforo_diario
         self.fecha_inicio = fecha_inicio
         self.visitantes = []
 
-    def registrar_dia(self, visitantes):
+    # --- Registrar el día siguiente ---
+    def registrar_dia(self, visitantes: int):
         self.visitantes.append(visitantes)
 
-    def fecha_siguiente(self):
+    # Fecha del próximo día que se puede registrar.
+    def fecha_siguiente(self) -> date:
         return self.fecha_inicio + timedelta(days=len(self.visitantes))
-   
-    def validar_visitantes(self, texto):
+
+    # Convierte el texto a entero y revisa que esté entre 0 y el aforo.
+    def validar_visitantes(self, texto: str) -> int:
         try:
             visitantes = int(texto)
         except ValueError:
@@ -24,7 +28,8 @@ class Museo:
             raise ValueError(f"Los visitantes van de 0 a {self.aforo_diario}.")
         return visitantes
     
-    def validar_num_dias(self, texto):
+    # --- Simular días ---
+    def validar_num_dias(self, texto: str) -> int:
         try:
             dias = int(texto)
         except ValueError:
@@ -32,14 +37,20 @@ class Museo:
         if dias < 1:
             raise ValueError("Se debe simular al menos un día.")
         return dias
-    
-    def validar_rango(self, minimo, maximo):
+
+    # Revisa que el mínimo no sea mayor que el máximo.
+    def validar_rango(self, minimo: int, maximo: int):
         if minimo > maximo:
             raise ValueError("El mínimo no puede ser mayor que el máximo.")
-     
-    def simular_dias(self, dias, minimo, maximo):
+    
+    # Agrega días con visitantes al azar entre el mínimo y el máximo.
+    def simular_dias(self, dias: int, minimo: int, maximo: int):
         for d in range(dias):
             self.registrar_dia(random.randint(minimo, maximo))
+    
+    # --- Fechas: el índice 0 es la fecha de inicio ---
+    def fecha_dia(self, indice: int) -> date:
+        return self.fecha_inicio + timedelta(days=indice)
 
     def obtener_dias_extremos(self):
         indice_max = 0
@@ -164,7 +175,8 @@ class Museo:
         )
 
 
-def buscar_museo(nombre, museos):
+# --- Varios museos ---
+def buscar_museo(nombre: str, museos: list) -> Museo:
     nombre = nombre.strip()
     for museo in museos:
         if museo.nombre == nombre:
@@ -172,7 +184,8 @@ def buscar_museo(nombre, museos):
     raise ValueError("No hay un museo con ese nombre.")
 
 
-def validar_nombre(nombre, nombres_existentes):
+# --- Crear un museo ---
+def validar_nombre(nombre: str, nombres_existentes: list) -> str:
     nombre = nombre.strip()
     if nombre == "":
         raise ValueError("El nombre no puede estar vacío.")
@@ -181,9 +194,10 @@ def validar_nombre(nombre, nombres_existentes):
     return nombre
 
 
-def validar_aforo(aforo_diario):
+# Convierte el aforo a entero y revisa que sea al menos 1.
+def validar_aforo(texto: str) -> int:
     try:
-        aforo = int(aforo_diario)
+        aforo = int(texto)
     except ValueError:
         raise ValueError("El aforo diario debe ser un número entero.")
     if aforo < 1:
@@ -191,19 +205,23 @@ def validar_aforo(aforo_diario):
     return aforo
 
 
-def validar_fecha(año, mes, dia):
+# Revisa que año, mes y día formen una fecha válida.
+def validar_fecha(año: str, mes: str, dia: str) -> date:
     try:
         return date(int(año), int(mes), int(dia))
     except ValueError:
         raise ValueError("La fecha no es válida.")
-        
 
-def crear_museo_validado(nombre, aforo_diario, año, mes,
-                         dia, nombres_existentes):
+
+# Crea un museo; si un dato falla, lanza el error del primero.
+def crear_museo_validado(nombre: str, aforo_diario: str, año: str, mes: str,
+                         dia: str, nombres_existentes: list) -> Museo:
+    # Valida en orden: nombre, aforo y fecha.
     nombre = validar_nombre(nombre, nombres_existentes)
     aforo = validar_aforo(aforo_diario)
     fecha = validar_fecha(año, mes, dia)
     return Museo(nombre, aforo, fecha)
+
     
 
 
