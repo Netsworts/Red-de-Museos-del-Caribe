@@ -98,48 +98,45 @@ class Museo:
     def fecha_con_menos_visitantes(self) -> date:
         return self.fecha_dia(self.indice_extremo(False))
 
-    def clasificar_asistencia(self, visitantes_dia):
-        porcentaje_dia = visitantes_dia / self.aforo_diario * 100
-        if porcentaje_dia < 30:
-            return "Baja"
-        elif porcentaje_dia < 60:
-            return "Media"
-        elif porcentaje_dia < 85:
-            return "Alta"
+   # --- Días en cada nivel de asistencia ---
+    def nivel_asistencia_dia(self, visitantes: int) -> str:
+        LIMITE_BAJA = 30     # porcentajes del aforo, según la tabla del enunciado
+        LIMITE_MEDIA = 60
+        LIMITE_ALTA = 85
+        # Se multiplica en lugar de dividir para comparar enteros exactos.
+        if visitantes * 100 < LIMITE_BAJA * self.aforo_diario:
+            return "baja"
+        elif visitantes * 100 < LIMITE_MEDIA * self.aforo_diario:
+            return "media"
+        elif visitantes * 100 < LIMITE_ALTA * self.aforo_diario:
+            return "alta"
         else:
-            return "Plena"
+            return "plena"
 
-    def contar_dias_por_nivel(self):
-        niveles = {
-            "Baja": 0,
-            "Media": 0,
-            "Alta": 0,
-            "Plena": 0,
-        }
+    # Cuántos días hay en cada nivel.
+    def dias_por_nivel(self) -> dict:
+        dias = {"baja": 0, "media": 0, "alta": 0, "plena": 0}
         for visitantes in self.visitantes:
-            nivel = self.clasificar_asistencia(visitantes)
-            niveles[nivel] += 1
-        return niveles
+            nivel = self.nivel_asistencia_dia(visitantes)
+            dias[nivel] = dias[nivel] + 1
+        return dias
 
-    def obtener_racha_baja(self):
-        racha_actual = 0
+    # --- Racha más larga en asistencia baja ---
+    def racha_asistencia_baja(self) -> dict:
+        mejor = {"dias": 0, "inicio": None}
+        dias_actuales = 0
         inicio_actual = None
-        max_racha = 0
-        inicio_max = None
-
-        for i in range(len(self.visitantes)):
-            if self.clasificar_asistencia(self.visitantes[i]) == "Baja":
-                if racha_actual == 0:
-                    inicio_actual = self.fecha_inicio + timedelta(days=i)
-                racha_actual += 1
-                if racha_actual > max_racha:
-                    max_racha = racha_actual
-                    inicio_max = inicio_actual
+        for indice in range(len(self.visitantes)):
+            if self.nivel_asistencia_dia(self.visitantes[indice]) == "baja":
+                if dias_actuales == 0:
+                    inicio_actual = self.fecha_dia(indice)
+                dias_actuales = dias_actuales + 1
+                if dias_actuales > mejor["dias"]:    # > deja la primera racha si empatan
+                    mejor["dias"] = dias_actuales
+                    mejor["inicio"] = inicio_actual
             else:
-                racha_actual = 0
-                inicio_actual = None
-
-        return max_racha, inicio_max
+                dias_actuales = 0
+        return mejor
 
     def calcular_dias_sin_registrar(self, fecha_actual=None):
         if fecha_actual is None:
@@ -169,17 +166,17 @@ class Museo:
         informe = informe + f"Desviación estándar: {round(self.desviacion_estandar(), 2)}\n"
         informe = informe + f"Día de más visitantes: {self.fecha_con_mas_visitantes()}\n"
         informe = informe + f"Día de menos visitantes: {self.fecha_con_menos_visitantes()}\n"
-        niveles = self.contar_dias_por_nivel()
-        informe = informe + f"Días en asistencia baja: {niveles['Baja']}\n"
-        informe = informe + f"Días en asistencia media: {niveles['Media']}\n"
-        informe = informe + f"Días en asistencia alta: {niveles['Alta']}\n"
-        informe = informe + f"Días en asistencia plena: {niveles['Plena']}\n"
+        
+        dias = self.dias_por_nivel()
+        for nivel in dias:
+            informe = informe + f"Días en asistencia {nivel}: {dias[nivel]}\n"
 
-        max_racha, inicio_max = self.obtener_racha_baja()
-        if max_racha == 0:
+        racha = self.racha_asistencia_baja()
+        if racha["inicio"] is None:
             texto_racha = "El museo no tuvo ningún día en asistencia baja."
         else:
-            texto_racha = f"{dias_en_texto(max_racha)} (empezó el {inicio_max})"
+            texto_racha = f"{dias_en_texto(racha['dias'])} (empezó el {racha['inicio']})"
+ 
         informe = informe + f"Racha más larga en asistencia baja: {texto_racha}\n"
 
         ultimo_dia, al_dia, dias_faltantes, desde, hasta = self.calcular_dias_sin_registrar()
