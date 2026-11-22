@@ -52,6 +52,31 @@ class Museo:
     def fecha_dia(self, indice: int) -> date:
         return self.fecha_inicio + timedelta(days=indice)
 
+    # --- Total, promedio, porcentaje y desviación ---
+    # Desde aquí, los métodos suponen al menos un día registrado.
+    def total_visitantes(self) -> int:
+        total = 0
+        for visitantes in self.visitantes:
+            total = total + visitantes
+        return total
+
+    # Total de visitantes dividido entre los días.
+    def promedio_visitantes(self) -> float:
+        return self.total_visitantes() / len(self.visitantes)
+
+    # Total de visitantes como porcentaje del aforo de todos los días.
+    def porcentaje_asistencia(self) -> float:
+        # Una sola división: así los empates dan exactamente el mismo número.
+        return self.total_visitantes() * 100 / (len(self.visitantes) * self.aforo_diario)
+
+    # Desviación estándar de los visitantes por día.
+    def desviacion_estandar(self) -> float:
+        promedio = self.promedio_visitantes()
+        suma_cuadrados = 0
+        for visitantes in self.visitantes:
+            suma_cuadrados = suma_cuadrados + (visitantes - promedio) ** 2
+        return (suma_cuadrados / len(self.visitantes)) ** 0.5
+
     def obtener_dias_extremos(self):
         indice_max = 0
         indice_min = 0
@@ -123,56 +148,49 @@ class Museo:
         desde = ultimo_dia + timedelta(days=1)
         return ultimo_dia, False, dias_faltantes, desde, ayer
     
-    def generar_informe(self):
+    # --- Informe de un museo ---
+    def generar_informe(self) -> str:
+        informe = f"Museo: {self.nombre}\n"
+        informe = informe + f"Aforo diario: {self.aforo_diario}\n"
         if len(self.visitantes) == 0:
-            return f"El museo {self.nombre} no tiene días registrados."
+            return informe + "El museo no tiene días registrados."
 
-        dias_registrados = len(self.visitantes)
-        total = sum(self.visitantes)
-        promedio = total / dias_registrados
-        porcentaje = promedio / self.aforo_diario * 100
-
-        suma_cuadrados = 0
-        for visitantes in self.visitantes:
-            suma_cuadrados += (visitantes - promedio) ** 2
-        desviacion_estandar = (suma_cuadrados / dias_registrados) ** 0.5
-
+        informe = informe + f"Días registrados: {len(self.visitantes)}\n"
+        informe = informe + f"Visitantes totales: {self.total_visitantes()}\n"
+        informe = informe + f"Promedio de visitantes por día: {round(self.promedio_visitantes(), 2)}\n"
+        informe = informe + f"Porcentaje de asistencia: {round(self.porcentaje_asistencia(), 2)} %\n"
+        informe = informe + f"Desviación estándar: {round(self.desviacion_estandar(), 2)}\n"
         fecha_max, fecha_min = self.obtener_dias_extremos()
+        informe = informe + f"Día de más visitantes: {fecha_max}\n"
+        informe = informe + f"Día de menos visitantes: {fecha_min}\n"
 
         niveles = self.contar_dias_por_nivel()
+        informe = informe + f"Días en asistencia baja: {niveles['Baja']}\n"
+        informe = informe + f"Días en asistencia media: {niveles['Media']}\n"
+        informe = informe + f"Días en asistencia alta: {niveles['Alta']}\n"
+        informe = informe + f"Días en asistencia plena: {niveles['Plena']}\n"
 
         max_racha, inicio_max = self.obtener_racha_baja()
         if max_racha == 0:
             texto_racha = "El museo no tuvo ningún día en asistencia baja."
         else:
-            etiqueta_racha = "día" if max_racha == 1 else "días"
-            texto_racha = f"{max_racha} {etiqueta_racha} (empezó el {inicio_max})"
+            texto_racha = f"{dias_en_texto(max_racha)} (empezó el {inicio_max})"
+        informe = informe + f"Racha más larga en asistencia baja: {texto_racha}\n"
 
         ultimo_dia, al_dia, dias_faltantes, desde, hasta = self.calcular_dias_sin_registrar()
+        informe = informe + f"Último día registrado: {ultimo_dia}\n"
         if al_dia:
-            texto_sin_registrar = "El registro está al día."
+            texto_faltantes = "El registro está al día."
         else:
-            etiqueta_faltantes = "día" if dias_faltantes == 1 else "días"
-            texto_sin_registrar = f"Faltan {dias_faltantes} {etiqueta_faltantes} (del {desde} al {hasta})."
+            texto_faltantes = f"Faltan {dias_en_texto(dias_faltantes)} (del {desde} al {hasta})."
+        return informe + f"Días sin registrar: {texto_faltantes}"
 
-        return (
-            f"Museo: {self.nombre}\n"
-            f"Aforo diario: {self.aforo_diario}\n"
-            f"Días registrados: {dias_registrados}\n"
-            f"Visitantes totales: {total}\n"
-            f"Promedio de visitantes por día: {round(promedio, 2)}\n"
-            f"Porcentaje de ocupación: {round(porcentaje, 2)}%\n"
-            f"Desviación estándar: {round(desviacion_estandar, 2)}"
-            f"Día de más visitantes: {fecha_max}\n"
-            f"Día de menos visitantes: {fecha_min}\n"
-            f"Días en asistencia baja: {niveles['Baja']}\n"
-            f"Días en asistencia media: {niveles['Media']}\n"
-            f"Días en asistencia alta: {niveles['Alta']}\n"
-            f"Días en asistencia plena: {niveles['Plena']}\n"
-            f"Racha más larga en asistencia baja: {texto_racha}\n"
-            f"Último día registrado: {ultimo_dia}\n"
-            f"Días sin registrar: {texto_sin_registrar}"
-        )
+
+# Escribe una cantidad de días: "1 día" o "N días".
+def dias_en_texto(cantidad: int) -> str:
+    if cantidad == 1:
+        return "1 día"
+    return f"{cantidad} días"
 
 
 # --- Varios museos ---
