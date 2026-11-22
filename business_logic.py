@@ -76,20 +76,27 @@ class Museo:
         for visitantes in self.visitantes:
             suma_cuadrados = suma_cuadrados + (visitantes - promedio) ** 2
         return (suma_cuadrados / len(self.visitantes)) ** 0.5
+        
+    # --- Día de más y día de menos visitantes ---
+    def indice_extremo(self, buscar_el_mayor: bool) -> int:
+        # Con > y < estrictos, en un empate se queda el primer día.
+        indice_elegido = 0
+        for indice in range(1, len(self.visitantes)):
+            if buscar_el_mayor:
+                if self.visitantes[indice] > self.visitantes[indice_elegido]:
+                    indice_elegido = indice
+            else:
+                if self.visitantes[indice] < self.visitantes[indice_elegido]:
+                    indice_elegido = indice
+        return indice_elegido
 
-    def obtener_dias_extremos(self):
-        indice_max = 0
-        indice_min = 0
+    # Fecha del día con más visitantes.
+    def fecha_con_mas_visitantes(self) -> date:
+        return self.fecha_dia(self.indice_extremo(True))
 
-        for i in range(1, len(self.visitantes)):
-            if self.visitantes[i] > self.visitantes[indice_max]:
-                indice_max = i
-            if self.visitantes[i] < self.visitantes[indice_min]:
-                indice_min = i
-
-        fecha_max = self.fecha_inicio + timedelta(days=indice_max)
-        fecha_min = self.fecha_inicio + timedelta(days=indice_min)
-        return fecha_max, fecha_min
+    # Fecha del día con menos visitantes.
+    def fecha_con_menos_visitantes(self) -> date:
+        return self.fecha_dia(self.indice_extremo(False))
 
     def clasificar_asistencia(self, visitantes_dia):
         porcentaje_dia = visitantes_dia / self.aforo_diario * 100
@@ -160,10 +167,8 @@ class Museo:
         informe = informe + f"Promedio de visitantes por día: {round(self.promedio_visitantes(), 2)}\n"
         informe = informe + f"Porcentaje de asistencia: {round(self.porcentaje_asistencia(), 2)} %\n"
         informe = informe + f"Desviación estándar: {round(self.desviacion_estandar(), 2)}\n"
-        fecha_max, fecha_min = self.obtener_dias_extremos()
-        informe = informe + f"Día de más visitantes: {fecha_max}\n"
-        informe = informe + f"Día de menos visitantes: {fecha_min}\n"
-
+        informe = informe + f"Día de más visitantes: {self.fecha_con_mas_visitantes()}\n"
+        informe = informe + f"Día de menos visitantes: {self.fecha_con_menos_visitantes()}\n"
         niveles = self.contar_dias_por_nivel()
         informe = informe + f"Días en asistencia baja: {niveles['Baja']}\n"
         informe = informe + f"Días en asistencia media: {niveles['Media']}\n"
