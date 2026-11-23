@@ -515,3 +515,26 @@ caso("C14-08", 14, "Después de cada opción distinta de salir vuelve el menú (
      "5|6|museos_sin_datos.csv|museos_sin_datos.csv|3|Museo A",
      "Ningún museo tiene días registrados.|Se cargaron 0 museos.|" + NO_HAY, menus=4)
 caso("C14-09", 14, "Opción con espacios alrededor ( 7 ): se acepta", "P0", " 7 ", "Hasta luego.", menus=1)
+
+# ---------------------------------------------------------------- Límite del calendario
+caso("C15-01", 15, "Desde 9999-12-30 caben dos días, el tercero se rechaza", "PL",
+     "2|Fin|1|2|Fin|1|2|Fin",
+     "Día a registrar: 9999-12-30|Día registrado.|Día a registrar: 9999-12-31|Día registrado.|" + LIMITE,
+     veces={"Día registrado.": 2})
+caso("C15-02", 15, "Simular 3 días desde 9999-12-30: se rechaza y no se agrega ninguno", "PL",
+     "3|Fin|3|1|5|4|Fin",
+     LIMITE + "|" + SIN_DIAS, ausente="Se simularon")
+caso("C15-03", 15, "Simular 2 días desde 9999-12-30: caben justo", "PL",
+     "3|Fin|2|1|5|4|Fin",
+     "Se simularon 2 días para Fin.|Días registrados: 2|Último día registrado: 9999-12-31")
+caso("C15-04", 15, "Simular un billón de días: se rechaza al instante", "PL",
+     "3|Fin|1000000000000|1|5|4|Fin",
+     LIMITE + "|" + SIN_DIAS, ausente="Se simularon")
+caso("C15-05", 15, "Simular 1 día y luego registrar otro desde 9999-12-30", "PL",
+     "3|Fin|1|1|5|2|Fin|3|4|Fin",
+     "Se simularon 1 días para Fin.|Día a registrar: 9999-12-31|Día registrado.|"
+     "Días registrados: 2|Último día registrado: 9999-12-31")
+caso("C15-06", 15, "Carga de archivos: la línea que no cabe se descarta con su causa", "P0",
+     "6|museos_pruebas.csv|visitantes_pruebas.csv|4|Fin",
+     "Línea 20 descartada: " + LIMITE + "|Se cargaron 63 días.|"
+     "Días registrados: 1|Último día registrado: 9999-12-31")
