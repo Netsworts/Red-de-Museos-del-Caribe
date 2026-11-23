@@ -201,6 +201,14 @@ def buscar_museo(nombre: str, museos: list) -> Museo:
     raise ValueError("No hay un museo con ese nombre.")
 
 
+# Lista con los nombres de todos los museos.
+def nombres_de_museos(museos: list) -> list:
+    nombres = []
+    for museo in museos:
+        nombres.append(museo.nombre)
+    return nombres
+
+
 # --- Crear un museo ---
 def validar_nombre(nombre: str, nombres_existentes: list) -> str:
     nombre = nombre.strip()

@@ -1,11 +1,15 @@
 from datetime import date
 
 from business_logic import (
+    Museo,
     buscar_museo,
+    nombres_de_museos,
     crear_museo_validado,
     )
 
-def pedir_museo(museos):
+
+# Pide el nombre y devuelve el museo, o None si no existe.
+def pedir_museo(museos: list) -> Museo | None:
     nombre = input("Nombre del museo: ")
     try:
         return buscar_museo(nombre, museos)
@@ -14,12 +18,9 @@ def pedir_museo(museos):
         return None
         
 
-def menu_crear(museos):
+# --- Crear un museo ---
+def opcion_crear_museo(museos: list):
     print("\n--- Crear museo ---")
-    nombres_existentes = []
-    for museo in museos:
-        nombres_existentes.append(museo.nombre)
-
     nombre = input("Nombre del museo: ")
     aforo_diario = input("Aforo diario: ")
     año = input("Año de inicio: ")
@@ -28,34 +29,34 @@ def menu_crear(museos):
 
     try:
         museo = crear_museo_validado(nombre, aforo_diario, año, mes, dia,
-                                     nombres_existentes)
+                                     nombres_de_museos(museos))
+        museos.append(museo)
+        print("Museo creado, sin días registrados.")
     except ValueError as error:
         print(error)
-        return
-
-    museos.append(museo)
-    print("Museo creado, sin días registrados.")
 
 
-def menu_registrar(museos):
+# --- Registrar el día siguiente ---
+def opcion_registrar_dia(museos: list):
     print("\n--- Registrar visitantes del día siguiente ---")
     museo = pedir_museo(museos)
     if museo is None:
         return
 
     print(f"Día a registrar: {museo.fecha_siguiente()}")
-    while True:
+    dia_guardado = False
+    while not dia_guardado:
         try:
             visitantes = museo.validar_visitantes(input("Visitantes del día: "))
-            break
+            museo.registrar_dia(visitantes)
+            dia_guardado = True
         except ValueError as error:
             print(error)
-
-    museo.registrar_dia(visitantes)
     print("Día registrado.")
 
 
-def menu_simular(museos):
+# --- Simular días ---
+def opcion_simular_dias(museos: list):
     print("\n--- Simular días ---")
     museo = pedir_museo(museos)
     if museo is None:
@@ -66,21 +67,21 @@ def menu_simular(museos):
         minimo = museo.validar_visitantes(input("Visitantes mínimos: "))
         maximo = museo.validar_visitantes(input("Visitantes máximos: "))
         museo.validar_rango(minimo, maximo)
+        museo.simular_dias(dias, minimo, maximo)
+        print(f"Se simularon {dias} días para {museo.nombre}.")
     except ValueError as error:
         print(error)
-        return
-
-    museo.simular_dias(dias, minimo, maximo)
-    print(f"Se simularon {dias} días para {museo.nombre}.")
 
 
-def menu_informe(museos):
+# --- Informe de un museo ---
+def opcion_informe_museo(museos: list):
     print("\n--- Informe de museo ---")
     museo = pedir_museo(museos)
     if museo is None:
         return
 
     print(museo.generar_informe(date.today()))
+
 
 
 # --- Menú principal ---
@@ -106,13 +107,13 @@ def main():
         opcion = input("Elige una opción: ").strip()
 
         if opcion == "1":
-            menu_crear(museos)
+            opcion_crear_museo(museos)
         elif opcion == "2":
-            menu_registrar(museos)
+            opcion_registrar_dia(museos)
         elif opcion == "3":
-            menu_simular(museos)
+            opcion_simular_dias(museos)
         elif opcion == "4":
-            menu_informe(museos)
+            opcion_informe_museo(museos)
         elif opcion == "5" or opcion == "6":
             print("Esta opción aún no está disponible.")
         elif opcion == "7":
