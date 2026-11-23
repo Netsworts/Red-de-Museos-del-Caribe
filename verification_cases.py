@@ -1,4 +1,15 @@
-#Comprueba los casos de verificación ejecutando user_interface.py.
+"""Comprueba los casos de verificación ejecutando user_interface.py.
+
+Uso, desde esta carpeta (la que tiene los archivos .csv):
+    python verification_cases.py                   todos los casos
+    python verification_cases.py C11-07 C02-02     solo esos casos
+    python verification_cases.py --detalle         muestra también la salida de cada caso
+
+Cada caso se ejecuta como lo haría una persona: arranca user_interface.py, teclea las
+entradas de la preparación y del caso, y compara lo que el programa muestra con la
+salida esperada. El programa corre en esta carpeta, para que las rutas de los archivos
+(museos.csv, visitantes.csv, ...) se encuentren aquí.
+"""
 import os
 import re
 import subprocess
