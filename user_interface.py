@@ -5,6 +5,8 @@ from business_logic import (
     buscar_museo,
     nombres_de_museos,
     crear_museo_validado,
+    museo_mayor_asistencia,
+    museo_menor_asistencia,
     )
 
 
@@ -89,6 +91,28 @@ def opcion_informe_museo(museos: list):
 
     print(museo.generar_informe(date.today()))
 
+
+# --- Porcentaje más alto y más bajo ---
+def opcion_porcentajes_extremos(museos: list):
+    print("\n--- Porcentaje de asistencia más alto y más bajo ---")
+    mayor = museo_mayor_asistencia(museos)
+    if mayor is None:
+        print("Ningún museo tiene días registrados.")
+        return
+
+    menor = museo_menor_asistencia(museos)
+    print(f"Mayor porcentaje de asistencia: {mayor.nombre}, "
+          f"{round(mayor.porcentaje_asistencia(), 2)} %")
+    print(f"Menor porcentaje de asistencia: {menor.nombre}, "
+          f"{round(menor.porcentaje_asistencia(), 2)} %")
+En main, reemplacen:
+        elif opcion == "5" or opcion == "6":
+            print("Esta opción aún no está disponible.")
+por:
+        elif opcion == "5":
+            opcion_porcentajes_extremos(museos)
+        elif opcion == "6":
+            print("Esta opción aún no está disponible.")
 
 
 # --- Menú principal ---

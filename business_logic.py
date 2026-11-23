@@ -258,6 +258,31 @@ def crear_museo_validado(nombre: str, aforo_diario: str, año: str, mes: str,
     return Museo(nombre, aforo, fecha)
 
     
+# --- Porcentaje más alto y más bajo ---
+def museos_con_dias(museos: list) -> list:
+    con_dias = []
+    for museo in museos:
+        if len(museo.visitantes) > 0:
+            con_dias.append(museo)
+    return con_dias
+
+
+# Museo con mayor porcentaje de asistencia, o None.
+def museo_mayor_asistencia(museos: list) -> Museo | None:
+    mayor = None
+    for museo in museos_con_dias(museos):
+        if mayor is None or museo.porcentaje_asistencia() > mayor.porcentaje_asistencia():
+            mayor = museo
+    return mayor
+
+
+# Museo con menor porcentaje de asistencia, o None.
+def museo_menor_asistencia(museos: list) -> Museo | None:
+    menor = None
+    for museo in museos_con_dias(museos):
+        if menor is None or museo.porcentaje_asistencia() < menor.porcentaje_asistencia():
+            menor = museo
+    return menor
 
 
 
