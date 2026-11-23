@@ -81,38 +81,40 @@ def menu_informe(museos):
     print(museo.generar_informe())
 
 
+# --- Menú principal ---
 def main():
+    OPCIONES = [
+        "Crear museo",
+        "Registrar visitantes del día siguiente",
+        "Simular días",
+        "Informe de museo",
+        "Museo con mayor y menor porcentaje de asistencia",
+        "Cargar museos y visitantes desde archivos",
+        "Salir",
+    ]
     museos = []
+    salir = False
 
-    while True:
+    while not salir:
         print("\n=====================================")
         print("Programa de registro de museos")
         print("=====================================")
-        print("1. Crear museo")
-        print("2. Registrar visitantes del día siguiente")
-        print("3. Simular días")
-        print("4. Informe de museo")
-        print("5. Museo con mayor y menor porcentaje de asistencia")
-        print("6. Cargar museos y visitantes desde archivos")
-        print("7. Salir")
+        for indice in range(len(OPCIONES)):
+            print(f"{indice + 1}. {OPCIONES[indice]}")    # el menú numera desde 1
         opcion = input("Elige una opción: ").strip()
 
         if opcion == "1":
             menu_crear(museos)
         elif opcion == "2":
-            menu_registrar(museos)        
+            menu_registrar(museos)
         elif opcion == "3":
             menu_simular(museos)
         elif opcion == "4":
             menu_informe(museos)
-        elif opcion in ("5", "6"):
+        elif opcion == "5" or opcion == "6":
             print("Esta opción aún no está disponible.")
         elif opcion == "7":
             print("Hasta luego.")
-            break
+            salir = True
         else:
             print("La opción no es válida.")
-
-
-if __name__ == "__main__":
-    main()
