@@ -108,14 +108,6 @@ def opcion_porcentajes_extremos(museos: list):
           f"{round(mayor.porcentaje_asistencia(), 2)} %")
     print(f"Menor porcentaje de asistencia: {menor.nombre}, "
           f"{round(menor.porcentaje_asistencia(), 2)} %")
-En main, reemplacen:
-        elif opcion == "5" or opcion == "6":
-            print("Esta opción aún no está disponible.")
-por:
-        elif opcion == "5":
-            opcion_porcentajes_extremos(museos)
-        elif opcion == "6":
-            print("Esta opción aún no está disponible.")
 
 
 # --- Cargar museos y visitantes desde archivos ---
@@ -193,3 +185,7 @@ def main():
             salir = True
         else:
             print("La opción no es válida.")
+
+
+if __name__ == "__main__":
+    main()
