@@ -288,3 +288,72 @@ caso("C05-02", 5, "Casa de la Música: 49.5", "PA", "4|Casa de la Música", "Des
 caso("C05-03", 5, "Un solo día registrado: 0.0", "PC1", "4|Museo del Café", "Desviación estándar: 0.0")
 caso("C05-04", 5, "Todos los días iguales: 0.0", "PX", "4|Museo Plano", "Desviación estándar: 0.0")
 caso("C05-05", 5, "Valores 100, 0 y 0: 47.14", "PX", "4|Museo Decimales", "Desviación estándar: 47.14")
+
+# ---------------------------------------------------------------- Día de más y de menos visitantes
+caso("C06-01", 6, "Museo del Mar", "PA", "4|Museo del Mar",
+     "Día de más visitantes: 2026-11-04|Día de menos visitantes: 2026-11-03")
+caso("C06-02", 6, "Casa de la Música", "PA", "4|Casa de la Música",
+     "Día de más visitantes: 2026-11-04|Día de menos visitantes: 2026-11-01")
+caso("C06-03", 6, "Empates en el máximo y en el mínimo: gana el primero", "PX", "4|Museo Empates",
+     "Día de más visitantes: 2026-11-02|Día de menos visitantes: 2026-11-04")
+caso("C06-04", 6, "Todos los días iguales: el primer día es el máximo y el mínimo", "PX", "4|Museo Plano",
+     "Día de más visitantes: 2026-11-01|Día de menos visitantes: 2026-11-01")
+caso("C06-05", 6, "Un solo día registrado", "PC1", "4|Museo del Café",
+     "Día de más visitantes: 2026-11-01|Día de menos visitantes: 2026-11-01")
+caso("C06-06", 6, "Fechas que cruzan el año", "PX", "4|Museo Cruce",
+     "Día de más visitantes: 2027-01-01|Día de menos visitantes: 2026-12-30")
+
+# ---------------------------------------------------------------- Días por nivel
+caso("C07-01", 7, "Límites con aforo 500: 149, 150, 299, 300, 424 y 425", "PX", "4|Museo Niveles",
+     "Días en asistencia baja: 1|Días en asistencia media: 2|Días en asistencia alta: 2|Días en asistencia plena: 1")
+caso("C07-02", 7, "Límites con aforo 100: 29, 30, 59, 60, 84 y 85", "PX", "4|Museo Niveles Cien",
+     "Días en asistencia baja: 1|Días en asistencia media: 2|Días en asistencia alta: 2|Días en asistencia plena: 1")
+caso("C07-03", 7, "Museo del Mar: 2, 0, 2 y 1 (se muestra también el nivel con cero)", "PA", "4|Museo del Mar",
+     "Días en asistencia baja: 2|Días en asistencia media: 0|Días en asistencia alta: 2|Días en asistencia plena: 1")
+caso("C07-04", 7, "Casa de la Música: 1, 1, 1 y 1", "PA", "4|Casa de la Música",
+     "Días en asistencia baja: 1|Días en asistencia media: 1|Días en asistencia alta: 1|Días en asistencia plena: 1")
+caso("C07-05", 7, "Todos los días en asistencia plena (aforo completo)", "PX", "4|Museo Lleno",
+     "Días en asistencia baja: 0|Días en asistencia media: 0|Días en asistencia alta: 0|Días en asistencia plena: 2")
+caso("C07-06", 7, "Todos los días en asistencia baja", "PX", "4|Museo Bajo",
+     "Días en asistencia baja: 3|Días en asistencia media: 0|Días en asistencia alta: 0|Días en asistencia plena: 0")
+
+# ---------------------------------------------------------------- Racha en asistencia baja
+caso("C08-01", 8, "Museo del Mar: 2 días desde 2026-11-02", "PA", "4|Museo del Mar",
+     "Racha más larga en asistencia baja: 2 días (empezó el 2026-11-02)")
+caso("C08-02", 8, "Dos rachas (2 y 3 días): gana la más larga", "PX", "4|Museo Rachas",
+     "Racha más larga en asistencia baja: 3 días (empezó el 2026-11-04)")
+caso("C08-03", 8, "Ningún día en asistencia baja", "PC1", "4|Museo del Café",
+     "Racha más larga en asistencia baja: El museo no tuvo ningún día en asistencia baja.")
+caso("C08-04", 8, "Dos rachas empatadas en 2 días: gana la primera", "PX", "4|Museo Rachas Iguales",
+     "Racha más larga en asistencia baja: 2 días (empezó el 2026-11-01)")
+caso("C08-05", 8, "Todos los días en asistencia baja", "PX", "4|Museo Bajo",
+     "Racha más larga en asistencia baja: 3 días (empezó el 2026-11-01)")
+caso("C08-06", 8, "Racha de un solo día", "PA", "4|Casa de la Música",
+     "Racha más larga en asistencia baja: 1 día (empezó el 2026-11-01)")
+caso("C08-07", 8, "La racha termina en el último día registrado", "PX", "4|Museo Racha Final",
+     "Racha más larga en asistencia baja: 2 días (empezó el 2026-11-02)")
+caso("C08-08", 8, "La racha más larga es la primera y hay otra corta después", "PX", "4|Museo Racha Primero",
+     "Racha más larga en asistencia baja: 3 días (empezó el 2026-11-01)")
+
+# ---------------------------------------------------------------- Días sin registrar
+caso("C09-01", 9, "Museo del Mar: último día 2026-11-05 y los días que faltan hasta ayer", "PA",
+     "4|Museo del Mar", "Último día registrado: 2026-11-05|Días sin registrar: {FALT_MAR}")
+caso("C09-02", 9, "Museo con registro muy atrasado (último día 2020-01-03)", "PX", "4|Museo Pasado",
+     "Último día registrado: 2020-01-03|Días sin registrar: {FALT_PASADO}")
+caso("C09-03", 9, "Registro en el futuro (último día en 2100): está al día", "PX", "4|Museo Futuro",
+     "Último día registrado: 2100-01-03|Días sin registrar: El registro está al día.")
+caso("C09-04", 9, "Último día registrado igual a ayer: está al día", "P0",
+     "1|Museo Reciente|100|{AYER_A}|{AYER_M}|{AYER_D}|2|Museo Reciente|10|4|Museo Reciente",
+     "Último día registrado: {AYER}|Días sin registrar: El registro está al día.")
+caso("C09-05", 9, "Último día registrado igual a anteayer: falta 1 día", "P0",
+     "1|Museo Reciente|100|{ANTE_A}|{ANTE_M}|{ANTE_D}|2|Museo Reciente|10|4|Museo Reciente",
+     "Último día registrado: {ANTE}|Días sin registrar: Faltan 1 día (del {AYER} al {AYER}).")
+caso("C09-06", 9, "Último día registrado igual a hoy: está al día", "P0",
+     "1|Museo Reciente|100|{HOY_A}|{HOY_M}|{HOY_D}|2|Museo Reciente|10|4|Museo Reciente",
+     "Último día registrado: {HOY}|Días sin registrar: El registro está al día.")
+caso("C09-07", 9, "Días simulados que pasan de hoy: está al día", "P0",
+     "1|Museo Reciente|100|{HOY_A}|{HOY_M}|{HOY_D}|3|Museo Reciente|3|10|20|4|Museo Reciente",
+     "Días registrados: 3|Días sin registrar: El registro está al día.")
+caso("C09-08", 9, "Museo con un día registrado el 2026-11-01 (según la fecha del computador)",
+     "PC1", "4|Museo del Café",
+     "Último día registrado: 2026-11-01|Días sin registrar: {FALT_CAFE}")
