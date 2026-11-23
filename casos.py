@@ -357,3 +357,161 @@ caso("C09-07", 9, "Días simulados que pasan de hoy: está al día", "P0",
 caso("C09-08", 9, "Museo con un día registrado el 2026-11-01 (según la fecha del computador)",
      "PC1", "4|Museo del Café",
      "Último día registrado: 2026-11-01|Días sin registrar: {FALT_CAFE}")
+
+# ---------------------------------------------------------------- Varios museos
+caso("C10-01", 10, "Cuatro museos: cada informe muestra sus propios datos", "PR",
+     "4|Museo del Mar|4|Casa de la Música|4|Museo del Café|4|Galería del Puerto",
+     "Museo: Museo del Mar|Aforo diario: 500|Visitantes totales: 1420|"
+     "Museo: Casa de la Música|Aforo diario: 200|Visitantes totales: 440|"
+     "Museo: Museo del Café|Aforo diario: 150|Visitantes totales: 60|"
+     "Museo: Galería del Puerto|Aforo diario: 100|" + SIN_DIAS)
+caso("C10-02", 10, "Museo del Banano no existe", "PR", "4|Museo del Banano", NO_HAY)
+caso("C10-03", 10, "museo del mar en minúsculas no existe", "PR", "4|museo del mar", NO_HAY)
+caso("C10-04", 10, "Museo del Cafe sin tilde no existe", "PR", "4|Museo del Cafe", NO_HAY)
+caso("C10-05", 10, "Nombre con espacios al inicio y al final sí existe", "PR", "4| Museo del Mar |",
+     "Museo: Museo del Mar|Visitantes totales: 1420")
+caso("C10-06", 10, "Museos creados por teclado conviven y no se mezclan los días", "P0",
+     "1|Museo Uno|100|2026|11|1|1|Museo Dos|200|2026|11|1|2|Museo Uno|40|4|Museo Dos|4|Museo Uno",
+     "Museo: Museo Dos|" + SIN_DIAS + "|Museo: Museo Uno|Visitantes totales: 40")
+caso("C10-07", 10, "Sin ningún museo, el informe avisa", "P0", "4|Museo del Mar", NO_HAY)
+
+# ---------------------------------------------------------------- Porcentaje más alto y más bajo
+caso("C11-01", 11, "Mar 56.8 %, Casa 55.0 %, Café 40.0 % y Galería sin días", "PR", "5",
+     "Mayor porcentaje de asistencia: Museo del Mar, 56.8 %|"
+     "Menor porcentaje de asistencia: Museo del Café, 40.0 %", ausente="Galería del Puerto")
+caso("C11-02", 11, "Sin ningún museo", "P0", "5", "Ningún museo tiene días registrados.")
+caso("C11-03", 11, "Con un museo sin días registrados", "P0",
+     "1|Galería del Puerto|100|2026|11|1|5", "Ningún museo tiene días registrados.",
+     ausente="Mayor porcentaje")
+caso("C11-04", 11, "Un solo museo con días: es el más alto y el más bajo", "PC1", "5",
+     "Mayor porcentaje de asistencia: Museo del Café, 40.0 %|"
+     "Menor porcentaje de asistencia: Museo del Café, 40.0 %")
+caso("C11-05", 11, "Un museo sin días no cuenta como 0 %, aunque se cree primero", "P0",
+     "1|Galería del Puerto|100|2026|11|1|1|Museo del Café|150|2026|11|1|2|Museo del Café|60|5",
+     "Mayor porcentaje de asistencia: Museo del Café, 40.0 %|"
+     "Menor porcentaje de asistencia: Museo del Café, 40.0 %", ausente="Galería del Puerto")
+caso("C11-06", 11, "Empate exacto (50 % y 50 %): cuenta el que se creó primero", "PEX", "5",
+     "Mayor porcentaje de asistencia: Museo Uno, 50.0 %|Menor porcentaje de asistencia: Museo Uno, 50.0 %")
+caso("C11-07", 11, "Empate que la aritmética decimal no ve igual (16.67 %): gana el primero", "PED", "5",
+     "Mayor porcentaje de asistencia: Museo Seis, 16.67 %|Menor porcentaje de asistencia: Museo Seis, 16.67 %")
+caso("C11-08", 11, "El mismo empate con el orden de creación invertido: gana Museo Tres", "PEDI", "5",
+     "Mayor porcentaje de asistencia: Museo Tres, 16.67 %|Menor porcentaje de asistencia: Museo Tres, 16.67 %")
+caso("C11-09", 11, "Se compara sin redondear: 33.333 % supera a 33.33 % aunque se muestran igual", "PSR", "5",
+     "Mayor porcentaje de asistencia: Museo Tres Plazas, 33.33 %|"
+     "Menor porcentaje de asistencia: Museo Diez Mil, 33.33 %")
+
+# ---------------------------------------------------------------- Cargar los museos
+caso("C12-01", 12, "Archivo de museos del enunciado: 2 museos y 5 líneas descartadas", "P0",
+     "6|museos.csv|museos_sin_datos.csv",
+     "Línea 4 descartada: El aforo diario debe ser de al menos un visitante.|"
+     "Línea 5 descartada: No tiene cinco campos.|"
+     "Línea 6 descartada: El aforo diario debe ser un número entero.|"
+     "Línea 7 descartada: Ya existe un museo con ese nombre.|"
+     "Línea 8 descartada: La fecha no es válida.|Se cargaron 2 museos.")
+caso("C12-02", 12, "Orden de las causas y número de línea (con líneas vacías y de espacios)", "P0",
+     "6|museos_pruebas.csv|museos_sin_datos.csv",
+     "Línea 4 descartada: No tiene cinco campos.|Línea 5 descartada: No tiene cinco campos.|"
+     "Línea 6 descartada: El nombre no puede estar vacío.|Línea 7 descartada: El nombre no puede estar vacío.|"
+     "Línea 8 descartada: Ya existe un museo con ese nombre.|"
+     "Línea 9 descartada: Ya existe un museo con ese nombre.|"
+     "Línea 10 descartada: El aforo diario debe ser un número entero.|"
+     "Línea 11 descartada: El aforo diario debe ser de al menos un visitante.|"
+     "Línea 12 descartada: El aforo diario debe ser de al menos un visitante.|"
+     "Línea 13 descartada: El aforo diario debe ser un número entero.|"
+     "Línea 14 descartada: El aforo diario debe ser un número entero.|"
+     "Línea 15 descartada: La fecha no es válida.|Línea 16 descartada: La fecha no es válida.|"
+     "Línea 17 descartada: La fecha no es válida.|Línea 18 descartada: La fecha no es válida.|"
+     "Línea 21 descartada: El nombre no puede estar vacío.|Se cargaron 22 museos.",
+     ausente="Línea 2 descartada|Línea 3 descartada|Línea 19 descartada|Línea 20 descartada|"
+             "Línea 22 descartada|Línea 23 descartada|Línea 24 descartada|Línea 25 descartada|"
+             "Línea 26 descartada|Línea 27 descartada|Línea 28 descartada")
+caso("C12-03", 12, "Espacios alrededor de los campos: los museos se crean con el nombre limpio", "P0",
+     "6|museos_pruebas.csv|museos_sin_datos.csv|4|Museo Uno|4|Museo Dos|4|Museo Tres",
+     "Se cargaron 22 museos.|Museo: Museo Uno|Aforo diario: 100|Museo: Museo Dos|Aforo diario: 200|"
+     "Museo: Museo Tres|Aforo diario: 300")
+caso("C12-04", 12, "Fecha bisiesta (2028) y aforo mínimo (1) se cargan bien", "P0",
+     "6|museos_pruebas.csv|museos_sin_datos.csv|4|Museo M|4|Museo N",
+     "Museo: Museo M|Aforo diario: 100|Museo: Museo N|Aforo diario: 1")
+caso("C12-05", 12, "Archivo de museos inexistente: no lee la ruta de visitantes", "P0",
+     "6|no_existe.csv|museos.csv|4|Museo del Mar",
+     "El archivo no existe.|" + NO_HAY, ausente="Se cargaron", veces={INVALIDA: 1})
+caso("C12-06", 12, "Archivo con solo el encabezado: el ciclo no hace ninguna iteración", "P0",
+     "6|museos_sin_datos.csv|museos_sin_datos.csv",
+     "Se cargaron 0 museos.|Se cargaron 0 días.", ausente="descartada")
+caso("C12-07", 12, "Con un museo creado por teclado: avisa y no lee ninguna ruta", "PC",
+     "6|museos.csv|visitantes.csv", "La carga solo se hace con el programa sin museos.",
+     ausente="Se cargaron", veces={INVALIDA: 2})
+caso("C12-08", 12, "Una segunda carga no agrega otra vez los días", "PA",
+     "6|museos.csv|visitantes.csv|4|Museo del Mar",
+     "La carga solo se hace con el programa sin museos.|Días registrados: 5|Visitantes totales: 1420",
+     ausente="Se cargaron", veces={INVALIDA: 2})
+caso("C12-09", 12, "Un museo cargado no puede crearse otra vez por teclado", "PA",
+     "1|Museo del Mar|300|2026|11|1", "Ya existe un museo con ese nombre.", ausente=NO_CREADO)
+caso("C12-10", 12, "Archivo de museos que no está en UTF-8 (exportado de Excel como ANSI)", "P0",
+     "6|museos_ansi.csv|visitantes.csv|4|Museo del Mar",
+     NO_UTF8 + "|" + NO_HAY, ausente="Se cargaron", veces={INVALIDA: 1})
+caso("C12-11", 12, "La ruta es una carpeta y no un archivo", "P0",
+     "6|.|visitantes.csv",
+     "El archivo no existe.", ausente="Se cargaron", veces={INVALIDA: 1})
+caso("C12-12", 12, "Ruta con espacios al inicio y al final", "P0",
+     "6|  museos.csv  |museos_sin_datos.csv", "Se cargaron 2 museos.", ausente="El archivo no existe.")
+
+# ---------------------------------------------------------------- Cargar los visitantes
+caso("C13-01", 13, "Archivos del enunciado: 9 días y 5 líneas descartadas", "P0",
+     "6|museos.csv|visitantes.csv|4|Museo del Mar|4|Casa de la Música",
+     "Se cargaron 2 museos.|Línea 10 descartada: Los visitantes van de 0 a 200.|"
+     "Línea 12 descartada: No hay un museo con ese nombre.|"
+     "Línea 13 descartada: Los visitantes van de 0 a 500.|"
+     "Línea 14 descartada: Los visitantes deben ser un número entero.|"
+     "Línea 15 descartada: No tiene dos campos.|Se cargaron 9 días.|"
+     "Visitantes totales: 1420|Visitantes totales: 440|Último día registrado: 2026-11-04")
+caso("C13-02", 13, "Orden de las causas, límites 0 y aforo, y espacios en los campos", "P0",
+     "6|museos_pruebas.csv|visitantes_pruebas.csv|4|Museo del Mar|4|Casa de la Música",
+     "Línea 3 descartada: No tiene dos campos.|Línea 4 descartada: No tiene dos campos.|"
+     "Línea 5 descartada: No hay un museo con ese nombre.|Línea 6 descartada: No hay un museo con ese nombre.|"
+     "Línea 7 descartada: Los visitantes deben ser un número entero.|"
+     "Línea 8 descartada: Los visitantes deben ser un número entero.|"
+     "Línea 9 descartada: Los visitantes van de 0 a 500.|Línea 10 descartada: Los visitantes van de 0 a 500.|"
+     "Línea 16 descartada: Los visitantes van de 0 a 200.|Línea 17 descartada: No hay un museo con ese nombre.|"
+     "Línea 18 descartada: Los visitantes deben ser un número entero.|"
+     "Línea 20 descartada: " + LIMITE + "|Se cargaron 63 días.|"
+     "Días registrados: 4|Visitantes totales: 1020|Porcentaje de asistencia: 51.0 %|"
+     "Días registrados: 1|Visitantes totales: 200|Porcentaje de asistencia: 100.0 %")
+caso("C13-03", 13, "Archivo de visitantes inexistente: los museos quedan cargados sin días", "P0",
+     "6|museos.csv|no_existe.csv|4|Museo del Mar",
+     "Se cargaron 2 museos.|El archivo no existe.|" + SIN_DIAS,
+     ausente="Se cargaron 0|Días registrados:")
+caso("C13-04", 13, "Archivo de visitantes que no está en UTF-8: los museos quedan sin días", "P0",
+     "6|museos.csv|museos_ansi.csv|4|Museo del Mar",
+     "Se cargaron 2 museos.|" + NO_UTF8 + "|" + SIN_DIAS, ausente="Días registrados:")
+caso("C13-05", 13, "Sin museos cargados, todas las líneas se descartan", "P0",
+     "6|museos_sin_datos.csv|visitantes.csv",
+     "Se cargaron 0 museos.|Línea 2 descartada: No hay un museo con ese nombre.|"
+     "Línea 15 descartada: No tiene dos campos.|Se cargaron 0 días.")
+caso("C13-06", 13, "Una línea descartada no consume un día: la Casa queda con 4 días seguidos", "PA",
+     "4|Casa de la Música",
+     "Días registrados: 4|Visitantes totales: 440|Último día registrado: 2026-11-04")
+caso("C13-07", 13, "Un archivo de museos usado como archivo de visitantes: cada línea tiene cinco campos", "P0",
+     "6|museos.csv|museos.csv",
+     "Se cargaron 2 museos.|Línea 2 descartada: No tiene dos campos.|"
+     "Línea 8 descartada: No tiene dos campos.|Se cargaron 0 días.")
+
+# ---------------------------------------------------------------- El menú
+caso("C14-01", 14, "El menú muestra las siete opciones en orden y 7 termina el programa", "P0", "7",
+     "1. Crear museo|2. Registrar visitantes del día siguiente|3. Simular días|4. Informe de museo|"
+     "5. Museo con mayor y menor porcentaje de asistencia|6. Cargar museos y visitantes desde archivos|"
+     "7. Salir|Hasta luego.", menus=1)
+caso("C14-02", 14, "Opción 8: avisa y vuelve a mostrar el menú", "P0", "8", INVALIDA, menus=2)
+caso("C14-03", 14, "Opción escrita como dos: avisa y vuelve a mostrar el menú", "P0", "dos", INVALIDA, menus=2)
+caso("C14-04", 14, "Opción vacía (solo Enter)", "P0", "<ENTER>", INVALIDA, menus=2)
+caso("C14-05", 14, "Otras opciones inexistentes: 0, 71 y -1", "P0", "0|71|-1", INVALIDA,
+     veces={INVALIDA: 3}, menus=4)
+caso("C14-06", 14, "Después de crear, registrar y ver un informe, el menú vuelve a mostrarse", "P0",
+     "1|Museo del Café|150|2026|11|1|2|Museo del Café|60|4|Museo del Café",
+     "Museo creado, sin días registrados.|Día registrado.|Museo: Museo del Café", menus=4)
+caso("C14-07", 14, "Con 7 el programa termina y no atiende lo que se teclee después", "P0",
+     "7|1|Museo A", "Hasta luego.", ausente="--- Crear museo ---", menus=1)
+caso("C14-08", 14, "Después de cada opción distinta de salir vuelve el menú (5 y 6 incluidas)", "P0",
+     "5|6|museos_sin_datos.csv|museos_sin_datos.csv|3|Museo A",
+     "Ningún museo tiene días registrados.|Se cargaron 0 museos.|" + NO_HAY, menus=4)
+caso("C14-09", 14, "Opción con espacios alrededor ( 7 ): se acepta", "P0", " 7 ", "Hasta luego.", menus=1)
