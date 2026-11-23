@@ -51,8 +51,7 @@ Al final debe decir `147 de 147 casos pasaron.` También se puede ejecutar solo 
 | `documentos/Documento_analisis.docx` | La especificación de cada requisito: entradas, salidas y reglas |
 | `documentos/Informe_integral.docx` | Los incrementos, las decisiones de diseño, el diagrama de la clase, los algoritmos y la solución final |
 | `documentos/Casos_de_verificacion.docx` | Los casos de verificación con su resultado |
-| `documentos/Informe_IA.docx` | Cómo usó el equipo la inteligencia artificial, incremento por incremento |
-| `evidencias_ia/` | Las conversaciones con la IA exportadas, que respaldan el informe de uso de la IA |
+| `documentos/Informe_IA.docx` | Cómo usó el equipo la inteligencia artificial, incremento por incremento y el enlace de las conversaciones |
 
 ## Seguimiento del trabajo
 
