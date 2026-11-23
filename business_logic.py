@@ -1,14 +1,15 @@
 from datetime import date, timedelta
 from random import randint
 
+
 # Un museo: sus datos y la lista de visitantes por día.
 class Museo:
     # Guarda nombre, aforo, fecha de inicio y una lista vacía de visitantes.
-    def __init__(self, nombre, aforo_diario, fecha_inicio):
+        def __init__(self, nombre: str, aforo_diario: int, fecha_inicio: date):
         self.nombre = nombre
         self.aforo_diario = aforo_diario
         self.fecha_inicio = fecha_inicio
-        self.visitantes = []
+          self.visitantes = []    # un elemento por cada día registrado, en orden
 
     # --- Registrar el día siguiente ---
     def registrar_dia(self, visitantes: int):
@@ -16,7 +17,7 @@ class Museo:
 
     # Fecha del próximo día que se puede registrar.
     def fecha_siguiente(self) -> date:
-        return self.fecha_inicio + timedelta(days=len(self.visitantes))
+        return self.fecha_dia(len(self.visitantes))
 
     # Convierte el texto a entero y revisa que esté entre 0 y el aforo.
     def validar_visitantes(self, texto: str) -> int:
@@ -38,6 +39,16 @@ class Museo:
             raise ValueError("Se debe simular al menos un día.")
         return dias
 
+    # Revisa que el mínimo no sea mayor que el máximo.
+    def validar_rango(self, minimo: int, maximo: int):
+        if minimo > maximo:
+            raise ValueError("El mínimo no puede ser mayor que el máximo.")
+    
+    # Agrega días con visitantes al azar entre el mínimo y el máximo.
+    def simular_dias(self, dias: int, minimo: int, maximo: int):
+        for _ in range(dias):
+            self.registrar_dia(randint(minimo, maximo))
+
         # Último día que permite Python: 9999-12-31
     def validar_capacidad(self, dias: int):
         if len(self.visitantes) == 0:
@@ -48,19 +59,13 @@ class Museo:
             raise ValueError(
                 "El registro no puede pasar del 31 de diciembre de 9999.")
 
-    # Revisa que el mínimo no sea mayor que el máximo.
-    def validar_rango(self, minimo: int, maximo: int):
-        if minimo > maximo:
-            raise ValueError("El mínimo no puede ser mayor que el máximo.")
-    
-    # Agrega días con visitantes al azar entre el mínimo y el máximo.
-    def simular_dias(self, dias: int, minimo: int, maximo: int):
-        for d in range(dias):
-            self.registrar_dia(random.randint(minimo, maximo))
-    
     # --- Fechas: el índice 0 es la fecha de inicio ---
     def fecha_dia(self, indice: int) -> date:
         return self.fecha_inicio + timedelta(days=indice)
+    
+    # Fecha del último día registrado.
+    def ultima_fecha_registrada(self) -> date:
+        return self.fecha_dia(len(self.visitantes) - 1)
 
     # --- Total, promedio, porcentaje y desviación ---
     # Desde aquí, los métodos suponen al menos un día registrado.
@@ -108,7 +113,7 @@ class Museo:
     def fecha_con_menos_visitantes(self) -> date:
         return self.fecha_dia(self.indice_extremo(False))
 
-   # --- Días en cada nivel de asistencia ---
+    # --- Días en cada nivel de asistencia ---
     def nivel_asistencia_dia(self, visitantes: int) -> str:
         LIMITE_BAJA = 30     # porcentajes del aforo, según la tabla del enunciado
         LIMITE_MEDIA = 60
@@ -148,7 +153,7 @@ class Museo:
                 dias_actuales = 0
         return mejor
 
-        # --- Días sin registrar ---
+    # --- Días sin registrar ---
     def dias_sin_registrar(self, fecha_actual: date) -> int:
         ayer = fecha_actual - timedelta(days=1)
         ultima = self.ultima_fecha_registrada()
@@ -180,7 +185,6 @@ class Museo:
             texto_racha = "El museo no tuvo ningún día en asistencia baja."
         else:
             texto_racha = f"{dias_en_texto(racha['dias'])} (empezó el {racha['inicio']})"
- 
         informe = informe + f"Racha más larga en asistencia baja: {texto_racha}\n"
 
         informe = informe + f"Último día registrado: {self.ultima_fecha_registrada()}\n"
@@ -192,7 +196,6 @@ class Museo:
             hasta = fecha_actual - timedelta(days=1)
             texto_faltantes = f"Faltan {dias_en_texto(faltan)} (del {desde} al {hasta})."
         return informe + f"Días sin registrar: {texto_faltantes}"
-
 
 
 # Escribe una cantidad de días: "1 día" o "N días".
@@ -339,16 +342,4 @@ def cargar_visitantes(registros: list, museos: list) -> dict:
                 resultado["cargados"] = resultado["cargados"] + 1
             except ValueError as error:
                 resultado["descartadas"].append([numero_linea, str(error)])
-    return resultado
-
-
-      
-
-
-
- 
-
-
-         
-
- 
+    return resultado    
