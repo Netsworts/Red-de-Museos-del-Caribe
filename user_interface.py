@@ -1,3 +1,5 @@
+from datetime import date
+
 from business_logic import (
     buscar_museo,
     crear_museo_validado,
@@ -78,7 +80,7 @@ def menu_informe(museos):
     if museo is None:
         return
 
-    print(museo.generar_informe())
+    print(museo.generar_informe(date.today()))
 
 
 # --- Menú principal ---

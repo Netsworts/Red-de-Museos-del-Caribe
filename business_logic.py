@@ -138,22 +138,16 @@ class Museo:
                 dias_actuales = 0
         return mejor
 
-    def calcular_dias_sin_registrar(self, fecha_actual=None):
-        if fecha_actual is None:
-            fecha_actual = date.today()
-
-        ultimo_dia = self.fecha_inicio + timedelta(days=len(self.visitantes) - 1)
+        # --- Días sin registrar ---
+    def dias_sin_registrar(self, fecha_actual: date) -> int:
         ayer = fecha_actual - timedelta(days=1)
+        ultima = self.ultima_fecha_registrada()
+        if ultima >= ayer:
+            return 0
+        return (ayer - ultima).days
 
-        if ultimo_dia >= ayer:
-            return ultimo_dia, True, 0, None, None
-
-        dias_faltantes = (ayer - ultimo_dia).days
-        desde = ultimo_dia + timedelta(days=1)
-        return ultimo_dia, False, dias_faltantes, desde, ayer
-    
     # --- Informe de un museo ---
-    def generar_informe(self) -> str:
+    def generar_informe(self, fecha_actual: date) -> str:
         informe = f"Museo: {self.nombre}\n"
         informe = informe + f"Aforo diario: {self.aforo_diario}\n"
         if len(self.visitantes) == 0:
@@ -179,13 +173,16 @@ class Museo:
  
         informe = informe + f"Racha más larga en asistencia baja: {texto_racha}\n"
 
-        ultimo_dia, al_dia, dias_faltantes, desde, hasta = self.calcular_dias_sin_registrar()
-        informe = informe + f"Último día registrado: {ultimo_dia}\n"
-        if al_dia:
+        informe = informe + f"Último día registrado: {self.ultima_fecha_registrada()}\n"
+        faltan = self.dias_sin_registrar(fecha_actual)
+        if faltan == 0:
             texto_faltantes = "El registro está al día."
         else:
-            texto_faltantes = f"Faltan {dias_en_texto(dias_faltantes)} (del {desde} al {hasta})."
+            desde = self.ultima_fecha_registrada() + timedelta(days=1)
+            hasta = fecha_actual - timedelta(days=1)
+            texto_faltantes = f"Faltan {dias_en_texto(faltan)} (del {desde} al {hasta})."
         return informe + f"Días sin registrar: {texto_faltantes}"
+
 
 
 # Escribe una cantidad de días: "1 día" o "N días".
