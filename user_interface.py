@@ -7,6 +7,9 @@ from business_logic import (
     crear_museo_validado,
     museo_mayor_asistencia,
     museo_menor_asistencia,
+    leer_registros,
+    cargar_museos,
+    cargar_visitantes,
     )
 
 
@@ -115,6 +118,42 @@ por:
             print("Esta opción aún no está disponible.")
 
 
+# --- Cargar museos y visitantes desde archivos ---
+def leer_archivo(ruta: str) -> list | None:
+    try:
+        return leer_registros(ruta.strip())
+    except UnicodeDecodeError:
+        print("El archivo no está guardado en UTF-8.")
+        return None
+    except OSError:
+        print("El archivo no existe.")
+        return None
+
+
+# Muestra las líneas descartadas y cuántos registros se cargaron.
+def mostrar_resultado_de_carga(resultado: dict, que_se_cargo: str):
+    for descartada in resultado["descartadas"]:
+        print(f"Línea {descartada[0]} descartada: {descartada[1]}")
+    print(f"Se cargaron {resultado['cargados']} {que_se_cargo}.")
+
+
+def opcion_cargar_archivos(museos: list):
+    print("\n--- Cargar museos y visitantes desde archivos ---")
+    if len(museos) > 0:
+        print("La carga solo se hace con el programa sin museos.")
+        return
+
+    registros_museos = leer_archivo(input("Ruta del archivo de museos: "))
+    if registros_museos is None:
+        return
+    mostrar_resultado_de_carga(cargar_museos(registros_museos, museos), "museos")
+
+    registros_visitantes = leer_archivo(input("Ruta del archivo de visitantes: "))
+    if registros_visitantes is None:
+        return
+    mostrar_resultado_de_carga(cargar_visitantes(registros_visitantes, museos), "días")
+
+
 # --- Menú principal ---
 def main():
     OPCIONES = [
@@ -145,8 +184,10 @@ def main():
             opcion_simular_dias(museos)
         elif opcion == "4":
             opcion_informe_museo(museos)
-        elif opcion == "5" or opcion == "6":
-            print("Esta opción aún no está disponible.")
+        elif opcion == "5":
+            opcion_porcentajes_extremos(museos)
+        elif opcion == "6":
+            opcion_cargar_archivos(museos)
         elif opcion == "7":
             print("Hasta luego.")
             salir = True

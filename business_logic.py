@@ -285,6 +285,62 @@ def museo_menor_asistencia(museos: list) -> Museo | None:
     return menor
 
 
+# --- Cargar museos y visitantes desde archivos ---
+def leer_registros(ruta: str) -> list:
+    archivo = open(ruta, encoding="utf-8")
+    lineas = archivo.readlines()
+    archivo.close()
+
+    registros = []
+    for indice in range(1, len(lineas)):
+        if lineas[indice].strip() != "":
+            campos = lineas[indice].split(";")
+            for j in range(len(campos)):
+                campos[j] = campos[j].strip()
+            registros.append([indice + 1, campos])
+    return registros
+
+
+# Crea los museos válidos y devuelve cuántos cargó y qué descartó.
+def cargar_museos(registros: list, museos: list) -> dict:
+    resultado = {"cargados": 0, "descartadas": []}
+    nombres_existentes = nombres_de_museos(museos)
+    for registro in registros:
+        numero_linea = registro[0]
+        campos = registro[1]
+        if len(campos) != 5:
+            resultado["descartadas"].append([numero_linea, "No tiene cinco campos."])
+        else:
+            try:
+                museo = crear_museo_validado(campos[0], campos[1], campos[2],
+                                             campos[3], campos[4], nombres_existentes)
+                museos.append(museo)
+                nombres_existentes.append(museo.nombre)
+                resultado["cargados"] = resultado["cargados"] + 1
+            except ValueError as error:
+                resultado["descartadas"].append([numero_linea, str(error)])
+    return resultado
+
+
+# Agrega los días válidos a cada museo y devuelve cuántos cargó y qué descartó.
+def cargar_visitantes(registros: list, museos: list) -> dict:
+    resultado = {"cargados": 0, "descartadas": []}
+    for registro in registros:
+        numero_linea = registro[0]
+        campos = registro[1]
+        if len(campos) != 2:
+            resultado["descartadas"].append([numero_linea, "No tiene dos campos."])
+        else:
+            try:
+                museo = buscar_museo(campos[0], museos)
+                visitantes = museo.validar_visitantes(campos[1])
+                museo.validar_capacidad(1)
+                museo.registrar_dia(visitantes)
+                resultado["cargados"] = resultado["cargados"] + 1
+            except ValueError as error:
+                resultado["descartadas"].append([numero_linea, str(error)])
+    return resultado
+
 
       
 
