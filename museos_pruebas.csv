@@ -1,0 +1,28 @@
+museo;aforo_diario;año;mes;día
+Museo del Mar;500;2026;11;1
+Casa de la Música;200;2026;11;1
+Museo B;100;2026;11
+Museo C;100;2026;11;1;7
+;100;2026;11;1
+   ;100;2026;11;1
+Museo del Mar;100;2026;11;1
+ Museo del Mar ;abc;2026;11;1
+Museo D;abc;2026;11;1
+Museo E;0;2026;11;1
+Museo F;-5;2026;11;1
+Museo G;100.5;2026;11;1
+Museo H;abc;2026;13;40
+Museo I;100;2026;noviembre;1
+Museo J;100;2026;2;30
+Museo K;100;dos mil;1;1
+Museo L;100;2027;2;29
+Museo M;100;2028;2;29
+
+;;;;
+Museo N;1;2026;1;1
+Fin;10;9999;12;31
+  Museo Uno  ; 100 ; 2026 ; 11 ; 1 
+
+Museo Dos;200;2026;11;1
+   
+ Museo Tres;300;2026;11;1
