@@ -5,11 +5,11 @@ from random import randint
 # Un museo: sus datos y la lista de visitantes por día.
 class Museo:
     # Guarda nombre, aforo, fecha de inicio y una lista vacía de visitantes.
-        def __init__(self, nombre: str, aforo_diario: int, fecha_inicio: date):
+    def __init__(self, nombre: str, aforo_diario: int, fecha_inicio: date):
         self.nombre = nombre
         self.aforo_diario = aforo_diario
         self.fecha_inicio = fecha_inicio
-          self.visitantes = []    # un elemento por cada día registrado, en orden
+        self.visitantes = []    # un elemento por cada día registrado, en orden
 
     # --- Registrar el día siguiente ---
     def registrar_dia(self, visitantes: int):
@@ -49,7 +49,7 @@ class Museo:
         for _ in range(dias):
             self.registrar_dia(randint(minimo, maximo))
 
-        # Último día que permite Python: 9999-12-31
+    # Último día que permite Python: 9999-12-31
     def validar_capacidad(self, dias: int):
         if len(self.visitantes) == 0:
             disponibles = (date.max - self.fecha_inicio).days + 1
