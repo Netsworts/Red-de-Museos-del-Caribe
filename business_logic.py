@@ -38,6 +38,16 @@ class Museo:
             raise ValueError("Se debe simular al menos un día.")
         return dias
 
+        # Último día que permite Python: 9999-12-31
+    def validar_capacidad(self, dias: int):
+        if len(self.visitantes) == 0:
+            disponibles = (date.max - self.fecha_inicio).days + 1
+        else:
+            disponibles = (date.max - self.ultima_fecha_registrada()).days
+        if dias > disponibles:
+            raise ValueError(
+                "El registro no puede pasar del 31 de diciembre de 9999.")
+
     # Revisa que el mínimo no sea mayor que el máximo.
     def validar_rango(self, minimo: int, maximo: int):
         if minimo > maximo:

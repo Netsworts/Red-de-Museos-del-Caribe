@@ -42,6 +42,12 @@ def opcion_registrar_dia(museos: list):
     museo = pedir_museo(museos)
     if museo is None:
         return
+    
+    try:
+        museo.validar_capacidad(1)
+    except ValueError as error:
+        print(error)
+        return
 
     print(f"Día a registrar: {museo.fecha_siguiente()}")
     dia_guardado = False
@@ -67,6 +73,7 @@ def opcion_simular_dias(museos: list):
         minimo = museo.validar_visitantes(input("Visitantes mínimos: "))
         maximo = museo.validar_visitantes(input("Visitantes máximos: "))
         museo.validar_rango(minimo, maximo)
+        museo.validar_capacidad(dias)
         museo.simular_dias(dias, minimo, maximo)
         print(f"Se simularon {dias} días para {museo.nombre}.")
     except ValueError as error:
